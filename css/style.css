@@ -1,0 +1,10 @@
+/*
+	SOME CSS STYLES GO HERE
+	ANTI CONFLICT LOL
+*/
+a {
+	text-decoration:none;
+}
+a:hover {
+	text-decoration:underline;
+}
