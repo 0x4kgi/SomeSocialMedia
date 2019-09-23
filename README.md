@@ -5,9 +5,9 @@ Simple SNS written in PHP
 
 This is written in 2017, just uploaded lately, expect ugly codes.
 
-#Installation (????)
+# Installation (????)
 Clone this repo
 Import `db.sql` into a database named `socialmediadb`
 
-#License
+# License
 MIT. do whatever
