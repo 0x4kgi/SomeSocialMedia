@@ -1,6 +1,7 @@
 <?php
 require("system/db.php");
 include("system/auth.php");
+include("lib/TimeAgo.php");
 
 $disp = "Select display_name from users WHERE username='" . $_SESSION['username'] . "'";
 $dispR = mysqli_query($con, $disp);
@@ -13,7 +14,7 @@ $dp = "";
 $userQuery = "SELECT * from users where username='" . $user . "'";
 $userResult = mysqli_query($con, $userQuery) or die(mysqli_error());
 $userRows = mysqli_fetch_assoc($userResult);
-if ($userRows['prof_pic'] == null) $dp = "uploads/avatars/noimg.jpg";
+if ($userRows['prof_pic'] == null) $dp = "assets/noimg.jpg";
 else $dp = $userRows['prof_pic'];
 
 $postCountQuery = "SELECT COUNT(post_id) AS postCTR FROM posts WHERE submittedby='" . $user . "'";
@@ -29,41 +30,8 @@ $dpQ = "SELECT prof_pic FROM users WHERE username='" . $_SESSION['username'] . "
 $dpR = mysqli_query($con, $dpQ);
 $dpRR = mysqli_fetch_assoc($dpR);
 if ($dpRR['prof_pic'] == null)
-    $profile_picture = "uploads/avatars/noimg.jpg";
+    $profile_picture = "assets/noimg.jpg";
 else $profile_picture = $dpRR['prof_pic'];
-
-function TimeAgo($oldTime, $newTime)
-{
-    $timeCalc = strtotime($newTime) - strtotime($oldTime);
-    if ($timeCalc < 0) {
-        $timeCalc = "FROM THE DISTANT FUTURE";
-    } else if ($timeCalc >= (60 * 60 * 24 * 30 * 12 * 2)) {
-        $timeCalc = intval($timeCalc / 60 / 60 / 24 / 30 / 12) . " years ago";
-    } else if ($timeCalc >= (60 * 60 * 24 * 30 * 12)) {
-        $timeCalc = intval($timeCalc / 60 / 60 / 24 / 30 / 12) . " year ago";
-    } else if ($timeCalc >= (60 * 60 * 24 * 30 * 2)) {
-        $timeCalc = intval($timeCalc / 60 / 60 / 24 / 30) . " months ago";
-    } else if ($timeCalc >= (60 * 60 * 24 * 30)) {
-        $timeCalc = intval($timeCalc / 60 / 60 / 24 / 30) . " month ago";
-    } else if ($timeCalc >= (60 * 60 * 24 * 2)) {
-        $timeCalc = intval($timeCalc / 60 / 60 / 24) . " days ago";
-    } else if ($timeCalc >= (60 * 60 * 24)) {
-        $timeCalc = " Yesterday";
-    } else if ($timeCalc >= (60 * 60 * 2)) {
-        $timeCalc = intval($timeCalc / 60 / 60) . " hours ago";
-    } else if ($timeCalc >= (60 * 60)) {
-        $timeCalc = intval($timeCalc / 60 / 60) . " hour ago";
-    } else if ($timeCalc >= 60 * 2) {
-        $timeCalc = intval($timeCalc / 60) . " minutes ago";
-    } else if ($timeCalc >= 60) {
-        $timeCalc = intval($timeCalc / 60) . " minute ago";
-    } else if ($timeCalc > 0) {
-        $timeCalc .= " seconds ago";
-    } else if ($timeCalc == 0) {
-        $timeCalc = "Just now";
-    } else $timeCalc = "Unknown date";
-    return $timeCalc;
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -76,16 +44,7 @@ function TimeAgo($oldTime, $newTime)
 </head>
 
 <body class="w3-light-grey">
-    <!-- top nav bar -->
-    <div class="w3-top w3-card">
-        <ul class="w3-navbar w3-black">
-            <li class="w3-right"><a href="logout.php">Logout</a></li>
-            <li class="w3-right"><a href="edit.php">Edit Profile</a></li>
-            <li class="w3-right"><a href="profile.php?user=<?php echo $_SESSION['username']; ?>"><?php echo $_SESSION['username']; ?></a></li>
-            <li class="w3-right"><a href="index.php">Home</a></li>
-        </ul>
-    </div>
-    <!-- top nav bar end -->
+    <?php include("layout/topNavBar.php"); ?>
     <br><br><br>
     <?php
     if ($userRows == false) {
@@ -162,7 +121,7 @@ function TimeAgo($oldTime, $newTime)
                     $r = mysqli_query($con, $q);
                     $n = mysqli_fetch_assoc($r);
                     if ($n['prof_pic'] == null)
-                        $p = "uploads/avatars/noimg.jpg";
+                        $p = "assets/noimg.jpg";
                     else $p = $n['prof_pic'];
                 ?>
                     <div class="w3-card w3-white" id="<?php echo $pid; ?>">
@@ -222,7 +181,7 @@ function TimeAgo($oldTime, $newTime)
                                     $cdpq = "SELECT display_name, prof_pic FROM users WHERE username='$cpN'";
                                     $cdpr = mysqli_query($con, $cdpq);
                                     $cdpn = mysqli_fetch_assoc($cdpr);
-                                    if ($cdpn['prof_pic'] == null) $cdp = "uploads/avatars/noimg.jpg";
+                                    if ($cdpn['prof_pic'] == null) $cdp = "assets/noimg.jpg";
                                     else $cdp = $cdpn['prof_pic'];
                                 ?>
                             <table class="w3-table">
