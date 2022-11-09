@@ -1,34 +1,35 @@
 <?php
 require("system/db.php");
-include("system/auth.php");
+require("system/auth.php");
+
 include("lib/TimeAgo.php");
 
 $id = $_REQUEST['id'];
 
-$postViewQuery = "SELECT * FROM posts where post_id = '$id'";
-$pvqC = mysqli_query($con, $postViewQuery);
-$pvqR = mysqli_fetch_assoc($pvqC);
+// $postViewQuery = "SELECT * FROM posts where post_id = '$id'";
+// $pvqC = mysqli_query($con, $postViewQuery);
+// $pvqR = mysqli_fetch_assoc($pvqC);
 
-$user = $pvqR['submittedby'];
-$dp = "";
-$userQuery = "SELECT * from users where username='" . $user . "'";
-$userResult = mysqli_query($con, $userQuery) or die(mysqli_error());
-$userRows = mysqli_fetch_assoc($userResult);
-if ($userRows['prof_pic'] == null) $dp = "assets/noimg.jpg";
-else $dp = $userRows['prof_pic'];
+// $user = $pvqR['submittedby'];
+// $dp = "";
+// $userQuery = "SELECT * from users where username='" . $user . "'";
+// $userResult = mysqli_query($con, $userQuery) or die(mysqli_error());
+// $userRows = mysqli_fetch_assoc($userResult);
+// if ($userRows['prof_pic'] == null) $dp = "assets/noimg.jpg";
+// else $dp = $userRows['prof_pic'];
 
-$profile_picture = "";
-$dpQ = "SELECT prof_pic FROM users WHERE username='" . $_SESSION['username'] . "'";
-$dpR = mysqli_query($con, $dpQ);
-$dpRR = mysqli_fetch_assoc($dpR);
-if ($dpRR['prof_pic'] == null)
-    $profile_picture = "assets/noimg.jpg";
-else $profile_picture = $dpRR['prof_pic'];
+// $profile_picture = "";
+// $dpQ = "SELECT prof_pic FROM users WHERE username='" . $_SESSION['username'] . "'";
+// $dpR = mysqli_query($con, $dpQ);
+// $dpRR = mysqli_fetch_assoc($dpR);
+// if ($dpRR['prof_pic'] == null)
+//     $profile_picture = "assets/noimg.jpg";
+// else $profile_picture = $dpRR['prof_pic'];
 
-$disp = "Select display_name from users WHERE username='" . $_SESSION['username'] . "'";
-$dispR = mysqli_query($con, $disp);
-$DRDR = mysqli_fetch_assoc($dispR);
-$naymu = $DRDR['display_name'];
+// $disp = "Select display_name from users WHERE username='" . $_SESSION['username'] . "'";
+// $dispR = mysqli_query($con, $disp);
+// $DRDR = mysqli_fetch_assoc($dispR);
+// $naymu = $DRDR['display_name'];
 ?>
 <!DOCTYPE html>
 <html>

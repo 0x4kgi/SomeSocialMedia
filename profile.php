@@ -1,44 +1,20 @@
 <?php
 require("system/db.php");
-include("system/auth.php");
+require("system/auth.php");
+require("system/getUserInfo.php");
 include("lib/TimeAgo.php");
 
-$disp = "Select display_name from users WHERE username='" . $_SESSION['username'] . "'";
-$dispR = mysqli_query($con, $disp);
-$DRDR = mysqli_fetch_assoc($dispR);
-$naymu = $DRDR['display_name'];
+$user = new User($con, $_REQUEST['user']);
+$userCommentCount = $user->getCommentCount();
+$userPostCount = $user->getPostCount();
 
-$user = $_REQUEST['user'];
-
-$dp = "";
-$userQuery = "SELECT * from users where username='" . $user . "'";
-$userResult = mysqli_query($con, $userQuery) or die(mysqli_error());
-$userRows = mysqli_fetch_assoc($userResult);
-if ($userRows['prof_pic'] == null) $dp = "assets/noimg.jpg";
-else $dp = $userRows['prof_pic'];
-
-$postCountQuery = "SELECT COUNT(post_id) AS postCTR FROM posts WHERE submittedby='" . $user . "'";
-$pcqResult = mysqli_query($con, $postCountQuery) or die(mysqli_error());
-$pcqRows = mysqli_fetch_assoc($pcqResult);
-
-$commentCountQuery = "SELECT COUNT(comment_id) AS commentCTR FROM comments WHERE submittedby='$user'";
-$ccqResult = mysqli_query($con, $commentCountQuery) or die(mysqli_error());
-$ccqRows = mysqli_fetch_assoc($ccqResult);
-
-$profile_picture = "";
-$dpQ = "SELECT prof_pic FROM users WHERE username='" . $_SESSION['username'] . "'";
-$dpR = mysqli_query($con, $dpQ);
-$dpRR = mysqli_fetch_assoc($dpR);
-if ($dpRR['prof_pic'] == null)
-    $profile_picture = "assets/noimg.jpg";
-else $profile_picture = $dpRR['prof_pic'];
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="utf-8">
-    <title><?php echo $user; ?>'s userpage!</title>
+    <title><?php echo $user->display_name; ?>'s userpage!</title>
     <link rel="stylesheet" href="css/w3.css" />
     <link rel="stylesheet" href="css/w3-1.css" />
 </head>
@@ -47,8 +23,9 @@ else $profile_picture = $dpRR['prof_pic'];
     <?php include("layout/topNavBar.php"); ?>
     <br><br><br>
     <?php
-    if ($userRows == false) {
-        echo "<h1>User <i>" . $user . "</i> is not found!</h1><br>";
+    // TODO: fix not found users in the getUserphp class
+    if (!isset($user->user_id)) {
+        echo "<h1>User <i>" . $_REQUEST['user'] . "</i> is not found!</h1><br>";
         echo "Maybe you had a typo while typing the user's URL!<br>";
         echo "Check the name after \"<i>profile.php?user=</i>\"<br>";
         echo "Click <a href=index.php>here</a> to go back to home!<br><br><br>";
@@ -62,24 +39,23 @@ else $profile_picture = $dpRR['prof_pic'];
             <div class="w3-col" style="width: 5px"><br></div>
             <!-- profile box -->
             <div class="w3-col m3 w3-card w3-center w3-white w3-leftbar w3-border-green" style="position: fixed;">
-                <img src="<?php echo $dp ?>" class="w3-circle" height="128" width="128" alt="Avatar"><br>
-                <b><?php echo $userRows['display_name'] ?><br></b>
-                <i><?php echo $userRows['username']; ?></i><br>
-                <?php if ($userRows['username'] == $_SESSION['username']) { ?>
+                <img src="<?php echo $user->profile_picture ?>" class="w3-circle" height="128" width="128" alt="Avatar"><br>
+                <b><?php echo $user->display_name ?><br></b>
+                <i><?php echo $user->username; ?></i><br>
+                <?php if ($user->username == $_SESSION['username']) { ?>
                     <span class="w3-tiny"><a href="edit.php" class="w3-hover-text-green">Edit Profile</a></span>
                 <?php } else {
                 } ?>
                 <hr>
-                Account created <?php echo TimeAgo($userRows['join_date'], date("Y-m-d H:i:s")) ?><br>
-                <?php if (($pcqRows['postCTR'] > 0)) { ?>
-                    This user has made <?php echo $pcqRows['postCTR']; ?> posts<br>
+                Account created <?php echo TimeAgo($user->join_date, date("Y-m-d H:i:s")) ?><br>
+                <?php if (($userPostCount > 0)) { ?>
+                    This user has made <?php echo $userPostCount; ?> posts<br>
                 <?php } else { ?>
                     This user hasn't posted yet. :(<br>
                 <?php } ?>
-                <?php if (($ccqRows['commentCTR'] > 0)) { ?>
-                    This user commented <?php echo $ccqRows['commentCTR']; ?> times<br>
-                <?php } else {
-                } ?>
+                <?php if (($userCommentCount > 0)) { ?>
+                    This user commented <?php echo $userCommentCount; ?> times<br>
+                <?php } ?>
                 <hr>
             </div>
             <div class="w3-col m3">
@@ -93,13 +69,13 @@ else $profile_picture = $dpRR['prof_pic'];
             <div class="w3-rest">
                 <!-- bio box (lol) -->
                 <header class="w3-container w3-green w3-card">
-                    <h1><?php echo $userRows['display_name'] ?>'s User page</h1>
+                    <h1><?php echo $user->display_name ?>'s User page</h1>
                     <p class="w3-tiny">this will be customizable in the future :)</p>
                 </header>
-                <?php if ($userRows['prof_bio'] != null) { ?>
+                <?php if ($user->bio != null) { ?>
                     <div class="w3-container w3-leftbar w3-sand w3-card">
                         <p class="w3-tiny">Bio</p>
-                        <p class="w3-xxlarge w3-serif"><i><?php echo $userRows['prof_bio'] ?></i></p>
+                        <p class="w3-xxlarge w3-serif"><i><?php echo $user->bio ?></i></p>
                     </div>
                 <?php } else { ?>
                     <div class="w3-container w3-pale-red w3-leftbar w3-rightbar w3-border-red">
@@ -111,7 +87,7 @@ else $profile_picture = $dpRR['prof_pic'];
                 <!-- posts start -->
                 <?php
                 $count = 1;
-                $sel_query = "Select * from posts where submittedby='$user' ORDER BY post_date desc;";
+                $sel_query = "Select * from posts where submittedby='$user->username' ORDER BY post_date desc;";
                 $result = mysqli_query($con, $sel_query);
                 while ($row = mysqli_fetch_assoc($result)) {
                     $pid = $row['post_id'];

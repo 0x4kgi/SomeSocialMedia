@@ -1,22 +1,10 @@
 <?php
-include("system/auth.php");
-include("lib/TimeAgo.php");
-require('system/db.php');
+require("system/db.php");
+require("system/auth.php");
+require("system/getUserInfo.php");
+require("lib/TimeAgo.php");
 
-
-$disp = "Select display_name from users WHERE username='" . $_SESSION['username'] . "'";
-$dispR = mysqli_query($con, $disp);
-$DRDR = mysqli_fetch_assoc($dispR);
-$naymu = $DRDR['display_name'];
-
-$profile_picture = "";
-$dpQ = "SELECT prof_pic FROM users WHERE username='" . $_SESSION['username'] . "'";
-$dpR = mysqli_query($con, $dpQ);
-$dpRR = mysqli_fetch_assoc($dpR);
-if ($dpRR['prof_pic'] == null)
-    $profile_picture = "assets/noimg.jpg";
-else $profile_picture = $dpRR['prof_pic'];
-
+$user = new User($con, $_SESSION['username']);
 
 $status = "";
 if (isset($_POST['new']) && $_POST['new'] == 'status') {
@@ -54,10 +42,10 @@ if (isset($_POST['new']) && $_POST['new'] == 'status') {
 
         <!-- profile box -->
         <div class="w3-col m3 w3-card w3-center w3-white w3-leftbar w3-border-green" style="position: fixed;">
-            <a href="profile.php?user=<?php echo $_SESSION['username'] ?>">
-                <img src="<?php echo $profile_picture ?>" class="w3-circle" height="128" width="128" alt="Avatar"></a><br>
-            <b><?php echo $naymu; ?><br></b>
-            <i><?php echo $_SESSION['username']; ?></i><br>
+            <a href="profile.php?user=<?php echo $user->username ?>">
+                <img src="<?php echo $user->profile_picture ?>" class="w3-circle" height="128" width="128" alt="Avatar"></a><br>
+            <b><?php echo $user->display_name; ?><br></b>
+            <i><?php echo $user->username; ?></i><br>
             <span class="w3-tiny"><a href="edit.php" class="w3-hover-text-green">Edit Profile</a></span>
             <hr>
 
@@ -137,7 +125,7 @@ if (isset($_POST['new']) && $_POST['new'] == 'status') {
                             <input type="hidden" name="submitter" value="<?php echo $_SESSION['username']; ?>">
                             <table>
                                 <tr>
-                                    <td width=33><img src="<?php echo $profile_picture ?>" class="w3-circle" height="32" width="32" alt="Avatar"></td>
+                                    <td width=33><img src="<?php echo $user->profile_picture ?>" class="w3-circle" height="32" width="32" alt="Avatar"></td>
                                     <td><input type="text" name="commentContent" class="w3-round w3-input" rows="1" height="12px" placeholder="Write a comment..."></td>
                                 </tr>
                             </table>
