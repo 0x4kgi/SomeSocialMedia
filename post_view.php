@@ -42,7 +42,7 @@ $id = $_REQUEST['id'];
 </head>
 
 <body class="w3-light-grey">
-    <?php include("layout/topNavBar.php"); ?>
+    <?php include("layout/topbar.php"); ?>
     <br><br><br>
     <!-- the entire page layout -->
     <div class="w3-row">

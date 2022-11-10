@@ -1,7 +1,7 @@
 <?php
 require("system/db.php");
 require("system/auth.php");
-require("system/getUserInfo.php");
+require("system/object/User.php");
 include("lib/TimeAgo.php");
 
 $user = new User($con, $_REQUEST['user']);
@@ -20,7 +20,7 @@ $userPostCount = $user->getPostCount();
 </head>
 
 <body class="w3-light-grey">
-    <?php include("layout/topNavBar.php"); ?>
+    <?php include("layout/topbar.php"); ?>
     <br><br><br>
     <?php
     // TODO: fix not found users in the getUserphp class
