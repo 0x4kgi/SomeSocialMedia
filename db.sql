@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 23, 2019 at 03:00 AM
--- Server version: 10.3.16-MariaDB
--- PHP Version: 7.1.30
+-- Generation Time: Nov 15, 2022 at 02:53 PM
+-- Server version: 10.4.25-MariaDB
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -21,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `socialmediadb`
 --
-CREATE DATABASE IF NOT EXISTS `socialmediadb` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `socialmediadb`;
 
 -- --------------------------------------------------------
 
@@ -30,13 +27,14 @@ USE `socialmediadb`;
 -- Table structure for table `comments`
 --
 
-DROP TABLE IF EXISTS `comments`;
 CREATE TABLE `comments` (
   `comment_id` int(11) NOT NULL,
   `post_id` int(100) NOT NULL,
-  `submittedby` varchar(512) NOT NULL,
-  `comment` varchar(1024) NOT NULL,
-  `comment_date` datetime NOT NULL
+  `user_id` varchar(512) NOT NULL,
+  `content` varchar(1024) NOT NULL,
+  `dateCreated` datetime NOT NULL DEFAULT current_timestamp(),
+  `dateModified` datetime DEFAULT NULL,
+  `dateDeleted` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -45,13 +43,14 @@ CREATE TABLE `comments` (
 -- Table structure for table `posts`
 --
 
-DROP TABLE IF EXISTS `posts`;
 CREATE TABLE `posts` (
   `post_id` int(11) NOT NULL,
-  `post_date` datetime NOT NULL,
-  `post` varchar(1024) NOT NULL,
-  `submittedby` varchar(50) NOT NULL,
-  `rating` int(11) DEFAULT NULL
+  `content` varchar(1024) NOT NULL,
+  `user_id` varchar(50) NOT NULL,
+  `rating` int(11) DEFAULT NULL,
+  `dateCreated` datetime NOT NULL DEFAULT current_timestamp(),
+  `dateModified` datetime DEFAULT NULL,
+  `dateDeleted` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -60,16 +59,17 @@ CREATE TABLE `posts` (
 -- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(144) NOT NULL,
   `display_name` varchar(50) NOT NULL,
-  `join_date` datetime NOT NULL,
-  `prof_bio` varchar(144) DEFAULT NULL,
-  `prof_pic` varchar(512) DEFAULT NULL
+  `bio` varchar(144) DEFAULT NULL,
+  `avatar` varchar(512) DEFAULT NULL,
+  `dateCreated` datetime NOT NULL DEFAULT current_timestamp(),
+  `dateModified` datetime DEFAULT NULL,
+  `dateDeleted` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -102,19 +102,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
