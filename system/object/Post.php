@@ -1,63 +1,41 @@
 <?php
 
-class Post
+class Post extends BaseObject
 {
-    public readonly string $postDate;
-    public readonly string $content;
-    public readonly User $submitter;
-    public readonly string $rating;
-    public array $comments = [];
-    public array $participants = [];
+    private string $post_id;
+    private string $content;
+    private string $user_id;
+    private string $rating;
 
-    public function __construct(
-        private readonly mysqli $connection,
-        public readonly string $id,
-    ) {
-        $this->getPostInfo();
+    /**
+     * Get the value of post_id
+     */
+    public function getPostId()
+    {
+        return $this->post_id;
     }
 
-    private function getPostInfo()
+    /**
+     * Get the value of content
+     */
+    public function getContent()
     {
-        $query = "SELECT * FROM `posts` WHERE `post_id`='{$this->id}'";
-        $row = mysqli_query($this->connection, $query);
-        $result = mysqli_fetch_assoc($row);
-
-        $this->postDate = $result['post_date'];
-        $this->content = $result['post'];
-        $this->submitter = new User($this->connection, $result['submittedby']);
-        $this->rating = $result['rating'];
+        return $this->content;
     }
 
-    public function getComments(): array
+    /**
+     * Get the value of user_id
+     */
+    public function getUserId()
     {
-        $sql = "SELECT * FROM comments WHERE post_id='{$this->id}'";
-        $query = mysqli_query($this->connection, $sql);
-
-        while ($row = mysqli_fetch_assoc($query)) {
-            $comment = new Comment(
-                $row['comment_id'],
-                $row['post_id'],
-                new User($this->connection, $row['submittedby']),
-                $row['comment'],
-                $row['comment_date'],
-            );
-
-            $this->comments[] = $comment;
-        }
-
-        return $this->comments;
+        return $this->user_id;
     }
 
-    public function getPostParticipants(): array
+    /**
+     * Get the value of rating
+     */
+    public function getRating()
     {
-        $sql = "SELECT DISTINCT submittedby FROM comments WHERE post_id='{$this->id}'";
-        $query = mysqli_query($this->connection, $sql);
-
-        while ($row = mysqli_fetch_assoc($query)) {
-            $this->participants[] = new User($this->connection, $row['submittedby']);;
-        }
-
-
-        return $this->participants;
+        return $this->rating;
     }
 }

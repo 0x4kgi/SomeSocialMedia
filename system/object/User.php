@@ -1,49 +1,162 @@
 <?php
-class User
+class User extends BaseObject
 {
-    public readonly string $user_id;
-    public readonly string $email;
-    public readonly string $display_name;
-    public readonly string $join_date;
-    public readonly string $bio;
-    public readonly string $profile_picture;
+    private string $user_id;
+    private string $username;
+    private string $email;
+    private string $password;
+    private ?string $display_name = null;
+    private ?string $bio = null;
+    private ?string $avatar = null;
 
-    public function __construct(
-        private readonly mysqli $connection,
-        public readonly string $username,
-    ) {
-        $this->getUserInfo();
+    /**
+     * Get the value of user_id
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
     }
 
-    private function getUserInfo()
+    /**
+     * Set the value of user_id
+     *
+     * @return  self
+     */
+    public function setUserId($user_id)
     {
-        $query = "SELECT * FROM `users` WHERE `username`='" . $this->username . "'";
-        $row = mysqli_query($this->connection, $query);
-        $result = mysqli_fetch_assoc($row);
+        $this->user_id = $user_id;
 
-        $this->user_id = $result['user_id'];
-        $this->email = $result['email'];
-        $this->display_name = $result['display_name'] ?? $this->username;
-        $this->join_date = $result['join_date'];
-        $this->bio = $result['prof_bio'] ?? "no bio";
-        $this->profile_picture = $result['prof_pic'] ?? "assets/noimg.jpg";
+        return $this;
     }
 
-    public function getPostCount(): int
+    /**
+     * Get the value of username
+     */
+    public function getUsername()
     {
-        $query = "SELECT COUNT(post_id) AS postCTR FROM posts WHERE submittedby='" . $this->username . "'";
-        $row = mysqli_query($this->connection, $query);
-        $result = mysqli_fetch_assoc($row);
-
-        return $result["postCTR"];
+        return $this->username;
     }
 
-    public function getCommentCount(): int
+    /**
+     * Set the value of username
+     *
+     * @return  self
+     */
+    public function setUsername($username)
     {
-        $query = "SELECT COUNT(comment_id) AS commentCTR FROM comments WHERE submittedby='" . $this->username . "'";
-        $row = mysqli_query($this->connection, $query);
-        $result = mysqli_fetch_assoc($row);
+        $this->username = $username;
 
-        return $result["commentCTR"];
+        return $this;
+    }
+
+    /**
+     * Get the value of email
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set the value of email
+     *
+     * @return  self
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of password
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * Set the value of password
+     *
+     * @return  self
+     */
+    public function setPassword($password)
+    {
+        $this->password = password_hash($password, PASSWORD_BCRYPT);
+
+        return $this;
+    }
+
+    /**
+     * Checks if the password provided is the same password from the database
+     *
+     * @param string $password
+     * @return boolean
+     */
+    public function isPasswordMatch(string $password): bool
+    {
+        return password_verify($password, $this->password);
+    }
+
+    /**
+     * Get the value of display_name
+     */
+    public function getDisplayName()
+    {
+        return $this->display_name;
+    }
+
+    /**
+     * Set the value of display_name
+     *
+     * @return  self
+     */
+    public function setDisplayName($display_name)
+    {
+        $this->display_name = $display_name;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of bio
+     */
+    public function getBio()
+    {
+        return $this->bio;
+    }
+
+    /**
+     * Set the value of bio
+     *
+     * @return  self
+     */
+    public function setBio($bio)
+    {
+        $this->bio = $bio;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of avatar
+     */
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
+    /**
+     * Set the value of avatar
+     *
+     * @return  self
+     */
+    public function setAvatar($avatar)
+    {
+        $this->avatar = $avatar;
+
+        return $this;
     }
 }
