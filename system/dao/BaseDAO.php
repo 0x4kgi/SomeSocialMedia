@@ -125,7 +125,7 @@ abstract class BaseDAO
      * @param array $parameters
      * @return bool
      */
-    protected function write(string $sql, array $parameters): bool
+    protected function run(string $sql, array $parameters): bool
     {
         return $this->executeQuery($sql, $parameters);
     }

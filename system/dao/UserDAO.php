@@ -49,7 +49,7 @@ class UserDAO extends BaseDAO
             ':avatar' => $user->getUsername(),
         ];
 
-        return $this->write($sql, $data);
+        return $this->run($sql, $data);
     }
 
     protected function update(User $user): bool
@@ -78,7 +78,7 @@ class UserDAO extends BaseDAO
             ':dateUpdated' => $this->dateNow(),
         ];
 
-        return $this->write($sql, $data);
+        return $this->run($sql, $data);
     }
 
     protected function delete(User $user): bool
@@ -109,6 +109,25 @@ class UserDAO extends BaseDAO
             ':dateDeleted' => $this->dateNow(),
         ];
 
-        return $this->write($sql, $data);
+        return $this->run($sql, $data);
+    }
+
+    protected function purge(User $user): bool
+    {
+        $sql = <<<SQL
+            DELETE FROM `users`
+            WHERE
+                `id`=? 
+                AND `username`=?
+                AND `email`=?
+        SQL;
+
+        $data = [
+            $user->getUserId(),
+            $user->getUsername(),
+            $user->getEmail(),
+        ];
+
+        return $this->run($sql, $data);
     }
 }

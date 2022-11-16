@@ -20,38 +20,73 @@ class CommentDAO extends BaseDAO
     {
         $sql = <<<SQL
             INSERT INTO `comments` (
+                `post_id`, `user_id`, `content`
             ) VALUES (
+                :postId, :userId, :content
             )
         SQL;
 
-        $data = [];
+        $data = [
+            ':postId' => $comment->getPostId(),
+            ':userId' => $comment->getUserId(),
+            ':content' => $comment->getContent(),
+        ];
 
-        return $this->write($sql, $data);
+        return $this->run($sql, $data);
     }
 
     protected function update(Comment $comment): bool
     {
         $sql = <<<SQL
-            UPDATE ``
+            UPDATE `comments`
             SET
+                `content`=:content
             WHERE
+                `post_id`=:postId AND `comment_id`=:commentId
         SQL;
 
-        $data = [];
+        $data = [
+            ':postId' => $comment->getPostId(),
+            ':commentId' => $comment->getCommentId(),
+            ':content' => $comment->getContent(),
+        ];
 
-        return $this->write($sql, $data);
+        return $this->run($sql, $data);
     }
 
     protected function delete(Comment $comment): bool
     {
         $sql = <<<SQL
-            UPDATE ``
+            UPDATE `comments`
             SET
+                `content`=:content,
+                `user_id`=:userId
             WHERE
+                `post_id`=:postId AND `comment_id`=:commentId
         SQL;
 
-        $data = [];
+        $data = [
+            `:userId` => null,
+            ':postId' => $comment->getPostId(),
+            ':commentId' => $comment->getCommentId(),
+            ':content' => '[ DELETED ]',
+        ];
 
-        return $this->write($sql, $data);
+        return $this->run($sql, $data);
+    }
+
+    protected function purge(Comment $comment): bool
+    {
+        $sql = <<<SQL
+            DELETE FROM `comments`
+            WHERE
+                `comment_id`=? 
+        SQL;
+
+        $data = [
+            $comment->getCommentId(),
+        ];
+
+        return $this->run($sql, $data);
     }
 }

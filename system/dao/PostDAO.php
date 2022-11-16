@@ -20,38 +20,82 @@ class CommentDAO extends BaseDAO
     {
         $sql = <<<SQL
             INSERT INTO `posts` (
+                `content`, `user_id`, `rating`,
             ) VALUES (
+                :content, :user, :rating
             )
         SQL;
 
-        $data = [];
+        $data = [
+            $post->getContent(),
+            $post->getUserId(),
+            $post->getRating(),
+        ];
 
-        return $this->write($sql, $data);
+        return $this->run($sql, $data);
     }
 
     protected function update(Post $post): bool
     {
         $sql = <<<SQL
-            UPDATE ``
+            UPDATE `posts`
             SET
+                `content`=:content,
+                `user_id`=:user,
+                `rating`=:rating,
+                `dateUpdated`=:dateUpdated
             WHERE
+                `post_id`=:postId AND `user_id`=:user
         SQL;
 
-        $data = [];
+        $data = [
+            ':content' => $post->getContent(),
+            ':user' => $post->getUserId(),
+            ':rating' => $post->getRating(),
+            ':dateUpdated' => $this->dateNow(),
+            ':postId' => $post->getPostId(),
+        ];
 
-        return $this->write($sql, $data);
+        return $this->run($sql, $data);
     }
 
     protected function delete(Post $post): bool
     {
         $sql = <<<SQL
-            UPDATE ``
+            UPDATE `posts`
             SET
+                `content`=:content,
+                `user_id`=:user,
+                `rating`=:rating,
+                `dateUpdated`=:dateUpdated,
+                `dateDeleted`=:dateUpdated
             WHERE
+                `post_id`=:postId AND `user_id`=:user
         SQL;
 
-        $data = [];
+        $data = [
+            ':content' => '[ DELETED ]',
+            ':user' => null,
+            ':rating' => $post->getContent(),
+            ':dateUpdated' => $this->dateNow(),
+            ':postId' => $post->getPostId(),
+        ];
 
-        return $this->write($sql, $data);
+        return $this->run($sql, $data);
+    }
+
+    protected function purge(Post $post): bool
+    {
+        $sql = <<<SQL
+            DELETE FROM `posts`
+            WHERE
+                `id`=? 
+        SQL;
+
+        $data = [
+            $post->getPostId(),
+        ];
+
+        return $this->run($sql, $data);
     }
 }
