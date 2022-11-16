@@ -9,6 +9,20 @@ class CommentDAO extends BaseDAO
         return $this->fetch($sql, [$id], Comment::class);
     }
 
+    protected function fetchAllCommentsByPost($postId): array
+    {
+        $sql = 'SELECT * FROM `comments` WHERE `post_id`=?';
+
+        return $this->fetchAll($sql, [$postId], Comment::class);
+    }
+
+    protected function fetchAllCommentsByUser($userId): array
+    {
+        $sql = 'SELECT * FROM `comments` WHERE `user_id`=?';
+
+        return $this->fetchAll($sql, [$userId], Comment::class);
+    }
+
     protected function fetchAllComments(): array
     {
         $sql = 'SELECT * FROM `comments`';
