@@ -99,10 +99,10 @@ class UserDAO extends BaseDAO
 
         $data = [
             ':id' => $user->getUserId(),
-            ':username' => "[DELETED-{$user->getUserId()}]",
+            ':username' => "[DELETED]",
             ':email' => "[DELETED]",
             ':password' => "[DELETED]",
-            ':display_name' => "[DELETED-{$user->getUserId()}]",
+            ':display_name' => "[DELETED]",
             ':bio' => null,
             ':avatar' => null,
             ':dateUpdated' => $this->dateNow(),
