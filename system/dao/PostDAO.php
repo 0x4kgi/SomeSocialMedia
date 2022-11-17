@@ -1,6 +1,6 @@
 <?php
 
-class CommentDAO extends BaseDAO
+class PostDAO extends BaseDAO
 {
     protected function fetchById(string $id): ?Post
     {
