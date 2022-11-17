@@ -53,7 +53,7 @@ class PostHandler extends PostDAO
     public function purge(Post $post): bool
     {
         if (!empty($post->getDateDeleted())) {
-            $this->setExecutionFeedback('Cannot purge this user from the database.');
+            $this->setExecutionFeedback('Cannot purge this post from the database.');
             return false;
         }
 
