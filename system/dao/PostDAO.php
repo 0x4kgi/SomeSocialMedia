@@ -9,6 +9,13 @@ class PostDAO extends BaseDAO
         return $this->fetch($sql, [$id], Post::class);
     }
 
+    protected function fetchByUser(string $id): ?Post
+    {
+        $sql = 'SELECT * FROM `posts` WHERE `user_id`=?';
+
+        return $this->fetch($sql, [$id], Post::class);
+    }
+
     protected function fetchAllPosts(): array
     {
         $sql = 'SELECT * FROM `posts`';

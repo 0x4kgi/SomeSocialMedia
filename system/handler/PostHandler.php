@@ -1,6 +1,6 @@
 <?php
 
-class UserHandler extends UserDAO
+class PostHandler extends PostDAO
 {
     private $executionFeedback;
 
@@ -14,10 +14,10 @@ class UserHandler extends UserDAO
         $this->executionFeedback = $executionFeedback;
     }
 
-    public function add(User $user): bool
+    public function add(Post $post): bool
     {
         try {
-            parent::add($user);
+            parent::add($post);
         } catch (Exception $e) {
             $this->setExecutionFeedback($e);
             return false;
@@ -26,10 +26,10 @@ class UserHandler extends UserDAO
         return true;
     }
 
-    public function update(User $user): bool
+    public function update(Post $post): bool
     {
         try {
-            parent::update($user);
+            parent::update($post);
         } catch (Exception $e) {
             $this->setExecutionFeedback($e);
             return false;
@@ -38,10 +38,10 @@ class UserHandler extends UserDAO
         return true;
     }
 
-    public function delete(User $user): bool
+    public function delete(Post $post): bool
     {
         try {
-            parent::delete($user);
+            parent::delete($post);
         } catch (Exception $e) {
             $this->setExecutionFeedback($e);
             return false;
@@ -50,15 +50,15 @@ class UserHandler extends UserDAO
         return true;
     }
 
-    public function purge(User $user): bool
+    public function purge(Post $post): bool
     {
-        if (!empty($user->getDateDeleted())) {
+        if (!empty($post->getDateDeleted())) {
             $this->setExecutionFeedback('Cannot purge this user from the database.');
             return false;
         }
 
         try {
-            parent::purge($user);
+            parent::purge($post);
         } catch (Exception $e) {
             $this->setExecutionFeedback($e);
             return false;
@@ -67,35 +67,33 @@ class UserHandler extends UserDAO
         return true;
     }
 
-    public function getUsers(): array
+    public function getPosts(): array
     {
-        return $this->fetchAllUsers();
+        return $this->fetchAllPosts();
+    }
+
+    public function getPostsByUser(User $user): array
+    {
+        return $this->fetchAllPostsByUser($user->getUserId());
     }
 
     /**
-     * Gets a user, if `$fetchMode` is unspecified, it will treat `$userString`
+     * Gets a post, if `$fetchMode` is unspecified, it will treat `$postString`
      * as `id`
      *
-     * @param string $userString
-     * @param string $fetchMode `id | username | email`
+     * @param string $postString
+     * @param string $fetchMode `id | user User->getUserId() or user id string`
      * @return User|null
      */
-    public function getUser($userString, $fetchMode = 'id'): ?User
+    public function getPost($postString, $fetchMode = 'id'): ?User
     {
         switch ($fetchMode) {
-            case 'username':
-                return $this->fetchByUsername($userString);
-            case 'email':
-                return $this->fetchByEmail($userString);
             case 'id':
-                return $this->fetchById($userString);
+                return $this->fetchById($postString);
+            case 'user':
+                return $this->fetchByUser($postString);
             default:
                 return null;
         }
-    }
-
-    public function isPasswordMatch(string $password, User $user): bool
-    {
-        return password_verify($password, $user->getPassword());
     }
 }
