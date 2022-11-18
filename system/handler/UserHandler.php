@@ -52,7 +52,7 @@ class UserHandler extends UserDAO
 
     public function purge(User $user): bool
     {
-        if (!empty($user->getDateDeleted())) {
+        if (empty($user->getDateDeleted())) {
             $this->setExecutionFeedback('Cannot purge this user from the database.');
             return false;
         }

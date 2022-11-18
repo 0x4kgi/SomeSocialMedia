@@ -93,7 +93,7 @@ class UserDAO extends BaseDAO
                 `bio`=:bio, 
                 `avatar`=:avatar,
                 `dateModified`=:dateModified,
-                `dateDeleted`=:dateDeleted,
+                `dateDeleted`=:dateDeleted
             WHERE `user_id`=:id
         SQL;
 
@@ -117,7 +117,7 @@ class UserDAO extends BaseDAO
         $sql = <<<SQL
             DELETE FROM `users`
             WHERE
-                `id`=? 
+                `user_id`=? 
                 AND `username`=?
                 AND `email`=?
         SQL;
