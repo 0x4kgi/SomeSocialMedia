@@ -1,19 +1,30 @@
 <?php
 class DB
 {
+    private static string $host = 'localhost';
+    private static string $port = '';
+    private static string $user = 'root';
+    private static string $pass = '';
+    private static string $name = 'socialmediadb';
+    private static string $charset = 'UTF-8';
+
     private static PDO $instance;
+
+    public static function changeDatabase($databaseName)
+    {
+        self::$name = $databaseName;
+    }
 
     public static function getInstance(): PDO
     {
         if (empty(self::$instance)) {
             $db_info = array(
-                // This should not be hardcoded.
-                "host" => "localhost",
-                "port" => "",
-                "user" => "root",
-                "pass" => "",
-                "name" => "socialmediadb",
-                "charset" => "UTF-8"
+                "host" => self::$host,
+                "port" => self::$port,
+                "user" => self::$user,
+                "pass" => self::$pass,
+                "name" => self::$name,
+                "charset" => self::$charset
             );
 
             try {
