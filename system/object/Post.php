@@ -38,4 +38,52 @@ class Post extends BaseObject
     {
         return $this->rating;
     }
+
+    /**
+     * Set the value of post_id
+     *
+     * @return  self
+     */
+    public function setPostId($post_id)
+    {
+        $this->post_id = $post_id;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of content
+     *
+     * @return  self
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of user_id
+     *
+     * @return  self
+     */
+    public function setUserId($user_id)
+    {
+        $this->user_id = $user_id;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of rating
+     *
+     * @return  self
+     */
+    public function setRating($rating)
+    {
+        $this->rating = $rating;
+
+        return $this;
+    }
 }
