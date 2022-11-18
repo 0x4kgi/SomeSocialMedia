@@ -42,11 +42,11 @@ class UserDAO extends BaseDAO
 
         $data = [
             ':username' => $user->getUsername(),
-            ':email' => $user->getUsername(),
-            ':password' => $user->getUsername(),
-            ':display_name' => $user->getUsername(),
-            ':bio' => $user->getUsername(),
-            ':avatar' => $user->getUsername(),
+            ':email' => $user->getEmail(),
+            ':password' => $user->getPassword(),
+            ':display_name' => $user->getDisplayName(),
+            ':bio' => $user->getBio(),
+            ':avatar' => $user->getAvatar(),
         ];
 
         return $this->run($sql, $data);
@@ -63,7 +63,7 @@ class UserDAO extends BaseDAO
                 `display_name`=:display_name, 
                 `bio`=:bio, 
                 `avatar`=:avatar,
-                `dateUpdated`=:dateUpdated
+                `dateModified`=:dateModified
             WHERE `user_id`=:id
         SQL;
 
@@ -75,7 +75,7 @@ class UserDAO extends BaseDAO
             ':display_name' => $user->getDisplayName(),
             ':bio' => $user->getBio(),
             ':avatar' => $user->getAvatar(),
-            ':dateUpdated' => $this->dateNow(),
+            ':dateModified' => $this->dateNow(),
         ];
 
         return $this->run($sql, $data);
@@ -92,7 +92,7 @@ class UserDAO extends BaseDAO
                 `display_name`=:display_name, 
                 `bio`=:bio, 
                 `avatar`=:avatar,
-                `dateUpdated`=:dateUpdated,
+                `dateModified`=:dateModified,
                 `dateDeleted`=:dateDeleted,
             WHERE `user_id`=:id
         SQL;
@@ -105,7 +105,7 @@ class UserDAO extends BaseDAO
             ':display_name' => "[DELETED]",
             ':bio' => null,
             ':avatar' => null,
-            ':dateUpdated' => $this->dateNow(),
+            ':dateModified' => $this->dateNow(),
             ':dateDeleted' => $this->dateNow(),
         ];
 

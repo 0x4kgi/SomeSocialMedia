@@ -68,7 +68,8 @@ class CommentDAO extends BaseDAO
         $sql = <<<SQL
             UPDATE `comments`
             SET
-                `content`=:content
+                `content`=:content,
+                `dateModified`=:dateModified
             WHERE
                 `post_id`=:postId AND `comment_id`=:commentId
         SQL;
@@ -77,6 +78,7 @@ class CommentDAO extends BaseDAO
             ':postId' => $comment->getPostId(),
             ':commentId' => $comment->getCommentId(),
             ':content' => $comment->getContent(),
+            ':dateModified' => $this->dateNow(),
         ];
 
         return $this->run($sql, $data);
@@ -88,7 +90,9 @@ class CommentDAO extends BaseDAO
             UPDATE `comments`
             SET
                 `content`=:content,
-                `user_id`=:userId
+                `user_id`=:userId,
+                `dateModified`=:dateModified,
+                `dateDeleted`=:dateModified
             WHERE
                 `post_id`=:postId AND `comment_id`=:commentId
         SQL;
@@ -98,6 +102,7 @@ class CommentDAO extends BaseDAO
             ':postId' => $comment->getPostId(),
             ':commentId' => $comment->getCommentId(),
             ':content' => '[ DELETED ]',
+            ':dateModified' => $this->dateNow(),
         ];
 
         return $this->run($sql, $data);

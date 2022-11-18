@@ -57,7 +57,7 @@ class PostDAO extends BaseDAO
                 `content`=:content,
                 `user_id`=:user,
                 `rating`=:rating,
-                `dateUpdated`=:dateUpdated
+                `dateModified`=:dateModified
             WHERE
                 `post_id`=:postId AND `user_id`=:user
         SQL;
@@ -66,7 +66,7 @@ class PostDAO extends BaseDAO
             ':content' => $post->getContent(),
             ':user' => $post->getUserId(),
             ':rating' => $post->getRating(),
-            ':dateUpdated' => $this->dateNow(),
+            ':dateModified' => $this->dateNow(),
             ':postId' => $post->getPostId(),
         ];
 
@@ -81,8 +81,8 @@ class PostDAO extends BaseDAO
                 `content`=:content,
                 `user_id`=:user,
                 `rating`=:rating,
-                `dateUpdated`=:dateUpdated,
-                `dateDeleted`=:dateUpdated
+                `dateModified`=:dateModified,
+                `dateDeleted`=:dateModified
             WHERE
                 `post_id`=:postId AND `user_id`=:user
         SQL;
@@ -91,7 +91,7 @@ class PostDAO extends BaseDAO
             ':content' => '[ DELETED ]',
             ':user' => null,
             ':rating' => $post->getContent(),
-            ':dateUpdated' => $this->dateNow(),
+            ':dateModified' => $this->dateNow(),
             ':postId' => $post->getPostId(),
         ];
 
