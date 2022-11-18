@@ -52,7 +52,7 @@ class CommentHandler extends CommentDAO
 
     public function purge(Comment $comment): bool
     {
-        if (!empty($comment->getDateDeleted())) {
+        if (empty($comment->getDateDeleted())) {
             $this->setExecutionFeedback('Cannot purge this comment from the database.');
             return false;
         }
@@ -90,7 +90,7 @@ class CommentHandler extends CommentDAO
      * @param string $fetchMode `id | user | post`
      * @return User|null
      */
-    public function getPost($commentString, $fetchMode = 'id'): ?User
+    public function getPost($commentString, $fetchMode = 'id'): ?Comment
     {
         switch ($fetchMode) {
             case 'id':

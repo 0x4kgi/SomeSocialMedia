@@ -52,7 +52,7 @@ class PostHandler extends PostDAO
 
     public function purge(Post $post): bool
     {
-        if (!empty($post->getDateDeleted())) {
+        if (empty($post->getDateDeleted())) {
             $this->setExecutionFeedback('Cannot purge this post from the database.');
             return false;
         }
@@ -82,10 +82,10 @@ class PostHandler extends PostDAO
      * as `id`
      *
      * @param string $postString
-     * @param string $fetchMode `id | user User->getUserId() or user id string`
-     * @return User|null
+     * @param string $fetchMode `id | user_id `
+     * @return Post|null
      */
-    public function getPost($postString, $fetchMode = 'id'): ?User
+    public function getPost($postString, $fetchMode = 'id'): ?Post
     {
         switch ($fetchMode) {
             case 'id':
