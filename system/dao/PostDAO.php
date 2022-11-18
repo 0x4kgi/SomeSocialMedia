@@ -34,16 +34,16 @@ class PostDAO extends BaseDAO
     {
         $sql = <<<SQL
             INSERT INTO `posts` (
-                `content`, `user_id`, `rating`,
+                `content`, `user_id`, `rating`
             ) VALUES (
                 :content, :user, :rating
             )
         SQL;
 
         $data = [
-            $post->getContent(),
-            $post->getUserId(),
-            $post->getRating(),
+            ':content' => $post->getContent(),
+            ':user' => $post->getUserId(),
+            ':rating' => $post->getRating(),
         ];
 
         return $this->run($sql, $data);
@@ -79,8 +79,7 @@ class PostDAO extends BaseDAO
             UPDATE `posts`
             SET
                 `content`=:content,
-                `user_id`=:user,
-                `rating`=:rating,
+                `user_id`=:empty,
                 `dateModified`=:dateModified,
                 `dateDeleted`=:dateModified
             WHERE
@@ -89,10 +88,10 @@ class PostDAO extends BaseDAO
 
         $data = [
             ':content' => '[ DELETED ]',
-            ':user' => null,
-            ':rating' => $post->getContent(),
+            ':user' => $post->getUserId(),
             ':dateModified' => $this->dateNow(),
             ':postId' => $post->getPostId(),
+            ':empty' => null,
         ];
 
         return $this->run($sql, $data);
@@ -103,7 +102,7 @@ class PostDAO extends BaseDAO
         $sql = <<<SQL
             DELETE FROM `posts`
             WHERE
-                `id`=? 
+                `post_id`=? 
         SQL;
 
         $data = [
