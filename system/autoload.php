@@ -1,6 +1,5 @@
 <?php
 
-require "auth.php";
 require "db.php";
 
 spl_autoload_register(function ($className) {
@@ -12,11 +11,11 @@ spl_autoload_register(function ($className) {
         if (file_exists(__DIR__ . "/dao/$className.php")) {
             require_once __DIR__ . "/dao/$className.php";
         }
-    } elseif (str_contains($class_name, 'Handler')) {
+    } elseif (str_contains($className, 'Handler')) {
         if (file_exists(__DIR__ . "/handler/$className.php")) {
             require_once __DIR__ . "/handler/$className.php";
         }
-    } elseif (str_contains($class_name, 'Object')) {
+    } elseif (str_contains($className, 'Object')) {
         if (file_exists(__DIR__ . "/object/$className.php")) {
             require_once __DIR__ . "/object/$className.php";
         }
