@@ -92,17 +92,18 @@ class CommentDAO extends BaseDAO
                 `content`=:content,
                 `user_id`=:userId,
                 `dateModified`=:dateModified,
-                `dateDeleted`=:dateModified
+                `dateDeleted`=:dateDeleted
             WHERE
                 `post_id`=:postId AND `comment_id`=:commentId
         SQL;
 
         $data = [
-            `:userId` => null,
+            ':content' => '[ DELETED ]',
+            ':userId' => null,
+            ':dateModified' => $this->dateNow(),
+            ':dateDeleted' => $this->dateNow(),
             ':postId' => $comment->getPostId(),
             ':commentId' => $comment->getCommentId(),
-            ':content' => '[ DELETED ]',
-            ':dateModified' => $this->dateNow(),
         ];
 
         return $this->run($sql, $data);
