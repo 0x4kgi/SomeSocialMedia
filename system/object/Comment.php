@@ -16,18 +16,6 @@ class Comment extends BaseObject
     }
 
     /**
-     * Set the value of comment_id
-     *
-     * @return  self
-     */
-    public function setCommentId($comment_id)
-    {
-        $this->comment_id = $comment_id;
-
-        return $this;
-    }
-
-    /**
      * Get the value of post_id
      */
     public function getPostId()
@@ -40,7 +28,7 @@ class Comment extends BaseObject
      *
      * @return  self
      */
-    public function setPost_id($post_id)
+    public function setPostId($post_id)
     {
         $this->post_id = $post_id;
 

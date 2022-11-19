@@ -18,18 +18,6 @@ class User extends BaseObject
     }
 
     /**
-     * Set the value of user_id
-     *
-     * @return  self
-     */
-    public function setUserId($user_id)
-    {
-        $this->user_id = $user_id;
-
-        return $this;
-    }
-
-    /**
      * Get the value of username
      */
     public function getUsername()

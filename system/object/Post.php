@@ -40,18 +40,6 @@ class Post extends BaseObject
     }
 
     /**
-     * Set the value of post_id
-     *
-     * @return  self
-     */
-    public function setPostId($post_id)
-    {
-        $this->post_id = $post_id;
-
-        return $this;
-    }
-
-    /**
      * Set the value of content
      *
      * @return  self
