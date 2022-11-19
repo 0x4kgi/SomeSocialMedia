@@ -88,19 +88,10 @@ class CommentHandler extends CommentDAO
      *
      * @param string $commentString
      * @param string $fetchMode `id | user | post`
-     * @return User|null
+     * @return Comment|null
      */
-    public function getPost($commentString, $fetchMode = 'id'): ?Comment
+    public function getComment($commentId): ?Comment
     {
-        switch ($fetchMode) {
-            case 'id':
-                return $this->fetchById($commentString);
-            case 'user':
-                return $this->fetchByUser($commentString);
-            case 'post':
-                return $this->fetchByPost($commentString);
-            default:
-                return null;
-        }
+        return $this->fetchById($commentId);
     }
 }
