@@ -123,11 +123,55 @@ $lastPost = $postHandler->getPost($lastId);
 var_dump($lastPost);
 echo "</details>";
 
-echo "</details>";
-
 /**
  * Comment TESTING!!!!!!!!!!!!!!!!!!!!!!!
  */
 echo "<details><summary>Comment testing!</summary>";
+$commentHandler = new CommentHandler();
+$comment = new Comment();
+
+$comment->setContent("post $time")->setUserId($time)->setPostId($time);
+var_dump($comment);
+
+echo "===============new comment<br>";
+$nc = $commentHandler->add($comment);
+if (!$nc) {
+    var_dump($commentHandler->getExecutionFeedback());
+}
+$lcid = $commentHandler->lastInsertId();
+$newcomment = $commentHandler->getComment($lcid);
+var_dump($newcomment);
+var_dump($commentHandler->getAllComments());
+
+echo "===============update<br>";
+
+$newcomment->setContent('modified');
+var_dump($newcomment);
+$uc = $commentHandler->update($newcomment);
+if (!$uc) {
+    var_dump($commentHandler->getExecutionFeedback());
+}
+$ed = $commentHandler->getComment($lcid);
+var_dump($ed);
+var_dump($commentHandler->getAllComments());
+
+
+echo "===============delete<br>";
+$dc = $commentHandler->delete($newcomment);
+if (!$dc) {
+    var_dump($commentHandler->getExecutionFeedback());
+}
+$dd = $commentHandler->getComment($lcid);
+var_dump($dd);
+var_dump($commentHandler->getAllComments());
+
+echo "===============purge<br>";
+$pc = $commentHandler->purge($dd);
+if (!$pc) {
+    var_dump($commentHandler->getExecutionFeedback());
+}
+$pd = $commentHandler->getComment($lcid);
+var_dump($pd);
+var_dump($commentHandler->getAllComments());
 
 echo "</details>";
