@@ -1,28 +1,30 @@
-<div class="tabs two">
-    <input id='tab-1' type='radio' name='tabgroupB' checked />
-    <label class="pseudo button toggle" for="tab-1">Login</label>
-    <input id='tab-2' type='radio' name='tabgroupB'>
-    <label class="pseudo button toggle" for="tab-2">Register</label>
-    <div class="row">
-        <div>
-            <section>
-                <h3>Welcome back!</h3>
-                <form>
-                    <label>Username<input type="email"></label>
-                    <label>Password<input type="password"></label>
-                    <button>Login</button>
-                </form>
-            </section>
-        </div>
+<div class="row align-items-center">
+    <div class="col w-100 mx-auto">
+        <div class="card p-3">
+            <div class="card-body">
+                <img src="assets/patchy-login.png" class="card-img-top" alt="Patchouli staring at you while you login or something">
 
-        <div>
-            <section>
-                <h3>Register to interact or something</h3>
-                <label>Email <input type="email"></label>
-                <label>Username <input type="email"></label>
-                <label>Password<input type="password"></label>
-                <button>Register</button>
-            </section>
+                <h3 class="card-title">Welcome back!</h3>
+                <h6 class="card-subtitle text-muted">This is a subtitle, cant think of a witty line atm</h6>
+
+                <form>
+                    <div class="form-floating p-1">
+                        <input type="username" class="form-control" id="floatingInput" placeholder="name@example.com">
+                        <label for="floatingInput">Username or email</label>
+                    </div>
+
+                    <div class="form-floating p-1">
+                        <input type="password" class="form-control" id="floatingInputPassword" placeholder="Password">
+                        <label for="floatingInputPassword">Password</label>
+                    </div>
+
+                    <div class="d-grid gap-2 p-1">
+                        <button type="submit" class="btn btn-primary" type="button">Login</button>
+                        <a href="portal.php?register" class="card-link">No account? Register!</a>
+                    </div>
+
+                </form>
+            </div>
         </div>
     </div>
 </div>
